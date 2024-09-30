@@ -1,4 +1,4 @@
-import { ChangeEvent } from "react";
+import { ChangeEvent, useState } from "react";
 import styles from "./Slider.module.scss";
 
 type SliderProp = {
@@ -20,13 +20,23 @@ export default function Slider(props: SliderProp) {
 
   const gradValue = (100 * (value - min)) / (max - min);
 
+  const [hover, setHover] = useState(false);
+
   return (
     <div className={styles.sliderDiv}>
       <div className={styles.nameDiv}>{name}</div>
       <input
+        onMouseEnter={() => {
+          setHover(true);
+        }}
+        onMouseLeave={() => {
+          setHover(false);
+        }}
         style={{
           background:
-            "linear-gradient(to right, #FFA0D9 0% " +
+            "linear-gradient(to right, #" +
+            (hover ? "ffa0e9" : "ffa0d9") +
+            " 0% " +
             gradValue +
             "%, #ffffff " +
             gradValue +

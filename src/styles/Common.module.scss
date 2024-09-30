@@ -1,6 +1,69 @@
 $black: #1f1f22;
+$black-opacity: rgba(31, 31, 34, 0.75);
+
+$placeholder: #bbbbce;
+$form-background: rgba(88, 88, 100, 0.75);
+
+$middle-gray: #6b707e;
+$light-gray: #9599ab;
+$lighter-gray: #a5a9bb;
 
 $white: #ffffff;
 
 $pink: #ffa0d9;
-$dark-pink: #ef90c9;
+$light-pink: #ffb0e9;
+
+@mixin gray-button {
+  height: 60px;
+  border-radius: 8px;
+  background-color: $light-gray;
+  color: $black;
+  font-size: 24px;
+  border: none;
+  cursor: pointer;
+  &:hover {
+    background-color: $lighter-gray;
+  }
+}
+
+@mixin pink-button {
+  height: 60px;
+  border-radius: 8px;
+  background-color: $pink;
+  color: $black;
+  font-size: 24px;
+  border: none;
+  cursor: pointer;
+  &:hover {
+    background-color: $light-pink;
+  }
+}
+
+@mixin form {
+  margin: 10px;
+  border-radius: 20px;
+  border-width: 1px;
+  border-color: $middle-gray;
+  background-color: rgba(88, 88, 100, 0.75);
+  color: $black;
+  &::placeholder {
+    color: $placeholder;
+  }
+}
+
+@mixin form-title {
+  @include form;
+  width: 374px;
+  height: 36px;
+  padding: 12px 16px;
+  font-size: 24px;
+  font-style: italic;
+}
+
+@mixin form-desc {
+  @include form;
+  width: 374px;
+  height: 101px;
+  padding: 16px;
+  font-size: 16px;
+}

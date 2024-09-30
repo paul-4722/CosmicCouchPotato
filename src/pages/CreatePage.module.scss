@@ -1,0 +1,21 @@
+@import "../styles/Common.module.scss";
+
+.backButton {
+  @include gray-button;
+}
+
+.nextButton {
+  @include pink-button;
+}
+
+.createButton {
+  @include pink-button;
+}
+
+.formTitle {
+  @include form-title;
+}
+
+.formDesc {
+  @include form-desc;
+}

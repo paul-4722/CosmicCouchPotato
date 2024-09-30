@@ -4,7 +4,7 @@ export default function LandingPage() {
   return (
     <div>
       <div>title</div>
-      <Link to="/tutorial?page=0">
+      <Link to="/tutorial">
         <button>TUTORIAL</button>
       </Link>
       <Link to="/create">

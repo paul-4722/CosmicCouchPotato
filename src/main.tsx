@@ -5,6 +5,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
 import Layout from "./Layout";
 import CreatePage from "./pages/CreatePage";
+import SelectStarPage from "./pages/SelectStarPage";
 
 const router = createBrowserRouter([
   {
@@ -14,6 +15,10 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <LandingPage />,
+      },
+      {
+        path: "/tutorial",
+        element: <SelectStarPage />,
       },
       {
         path: "/create",
