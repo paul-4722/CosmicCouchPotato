@@ -1,4 +1,3 @@
-
 import styles from "./CelestialSphere.module.scss";
 import * as THREE from "three";
 import { Canvas } from "@react-three/fiber";

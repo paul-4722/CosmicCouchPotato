@@ -1,6 +1,7 @@
 import styles from "./CreatePage.module.scss";
 import { useState } from "react";
 import Slider from "../components/Slider";
+import PieChartSlider from "../components/PieChartSlider";
 
 export default function CreatePage() {
   const [radi, setRadi] = useState(1);
@@ -15,6 +16,7 @@ export default function CreatePage() {
         valueToShow={radi.toFixed(1) + "AU"}
         setValue={setRadi}
       />
+      <PieChartSlider names={["1", "2", "3", "4"]} />
       <button className={styles.backButton}>Back</button>
       <button className={styles.nextButton}>Next</button>
       <button className={styles.createButton}>Create Planet</button>
