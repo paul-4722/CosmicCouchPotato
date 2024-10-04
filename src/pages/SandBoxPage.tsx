@@ -2,9 +2,12 @@ import styles from "./SandBoxPage.module.scss";
 import { useState } from "react";
 import Slider from "../components/Slider";
 import PieChartSlider from "../components/PieChartSlider";
+import RegisterModal from "../components/RegisterModal";
+import ScenarioList from "../components/ScenarioList";
 
 export default function CreatePage() {
   const [radi, setRadi] = useState(1);
+  const [showModal, setShowModal] = useState(false);
   return (
     <div>
       <Slider
@@ -19,11 +22,18 @@ export default function CreatePage() {
       <PieChartSlider names={["1", "2", "3", "4"]} />
       <button className={styles.backButton}>Back</button>
       <button className={styles.nextButton}>Next</button>
-      <button className={styles.createButton}>Create Planet</button>
+      <button
+        className={styles.createButton}
+        onClick={() => setShowModal(true)}
+      >
+        Show Modal
+      </button>
       <br />
       <input placeholder="Name Your Planet" className={styles.formTitle} />
       <br />
       <textarea placeholder="Description" className={styles.formDesc} />
+      <RegisterModal show={showModal} setShow={setShowModal} />
+      <ScenarioList />
     </div>
   );
 }
