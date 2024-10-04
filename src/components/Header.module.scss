@@ -1,0 +1,28 @@
+@import "../styles/Common.module.scss";
+
+header {
+  position: absolute;
+  top: 48px;
+  width: calc(100% - 116px);
+  right: 116px;
+  height: 60px;
+  display: flex;
+  justify-content: end;
+  z-index: 99;
+
+  div {
+    background-color: $black-opacity;
+    display: flex;
+    gap: 78px;
+    align-items: center;
+    padding: 12px 24px;
+    border-radius: 52px;
+
+    a {
+      font-size: 24px;
+      font-style: italic;
+      color: $white;
+      text-decoration-line: none;
+    }
+  }
+}

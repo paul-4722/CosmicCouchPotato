@@ -71,9 +71,6 @@ export default function CelestialSphere() {
           position: [0, -0.01, 0],
           fov: 60 / zoomRatio,
         }}
-        style={{
-          backgroundColor: "#141428",
-        }}
       >
         <EffectComposer>
           <Bloom
