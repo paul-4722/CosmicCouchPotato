@@ -1,12 +1,17 @@
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { HTTPMethod, baseURL } from "../tools/HTTPMethod";
+import { StarData } from "../tools/DataInterface";
 
 export default function CreatePage() {
-  return (
-    <div>
-      CREATE PAGE My Solar System etc
-      <Link to="/create/new">
-        <button>+</button>
-      </Link>
-    </div>
-  );
+  const [star, setStar] = useState<StarData>();
+
+  useEffect(() => {
+    HTTPMethod("GET", baseURL + "star/1/")
+    .then(response => {setStar(response.star)})
+    .catch(error => {console.error(error)})
+  }, [])
+  
+  if(star)
+    return <div>{star.name}</div>;
 }
