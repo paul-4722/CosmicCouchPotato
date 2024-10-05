@@ -1,7 +1,7 @@
+// @ts-nocheck
 
-
-import React, { useState, useEffect } from "react";
-import { Canvas, Rect, Ellipse, Circle, Shadow, FabricObject, Text} from "fabric";
+import React, { useState, useEffect, useRef } from "react";
+import { Canvas, Ellipse, Circle, Shadow, FabricObject } from "fabric";
 import Slider from "../Slider";
 import PlanetMotion from "./PlanetMotion";
 
@@ -11,15 +11,25 @@ type SolarSystemProp = {
   width: number;
   habitable_min: number;
   habitable_max: number;
+  planets: Array<PlanetProp>;
+  create: Boolean;
 };
 
-type ViewerProp = {
-  height: number;
-  width: number;
+type PlanetProp = {
   ec: number;
   axis: number;
-  min: number;
-  max: number;
+  color: string;
+  size: number;
+};
+
+type EllipseProp = {
+  ec: number;
+  axis: number;
+  width: number;
+  height: number;
+  size: number;
+  color: string;
+  check: number;
 }; 
 
 type ControllerProp = {
@@ -31,17 +41,18 @@ type ControllerProp = {
 
 const STAR_RADIUS = 5;
 
-function SolarSystemViewer(props: ViewerProp){
-  const {height, width, ec, axis, min, max} = props;
-  const [canvas, setCanvas] = useState<Canvas | null>(null);
+function SolarSystemEllipse(props: EllipseProp){
+  const {ec, axis, width, height, size, color, check} = props;
   const center_x = width/2, center_y = height/2;
+  return (
+    <div style={{position: "absolute", top: 0, left: 0}}>
+      <PlanetMotion ec={ec} axis={axis} offsetX={center_x} offsetY={center_y} size={size} color={color} check={check}/>
+    </div>
+  )
+}
 
-
-  const initCanvas = () =>
-    new Canvas("canvas", {
-      height: height,
-      width: width,
-    });
+function DrawEllipse(ec: number, axis: number, canvas: Canvas){
+  const center_x = canvas.width/2, center_y = canvas.height/2;
   
   let ellipse_props = {
     rx: axis, 
@@ -52,6 +63,26 @@ function SolarSystemViewer(props: ViewerProp){
     stroke: "black", 
   }
 
+  
+  function stopDragging(element: FabricObject){
+    element.lockMovementX = true;
+    element.lockMovementY = true;
+    element.selectable = false;
+  }
+  
+
+  if(canvas){
+    canvas.__onMouseDown = () => null;
+    canvas.renderTop();
+    var orbit = new Ellipse(ellipse_props);
+    stopDragging(orbit)
+    canvas.add(orbit)
+  }
+}
+
+function DrawHabitable(min_radius: number, max_radius: number, canvas: Canvas){
+  const center_x = canvas.width/2, center_y = canvas.height/2;
+
   let star_props = {
     radius: STAR_RADIUS, 
     left: center_x - STAR_RADIUS, 
@@ -60,22 +91,23 @@ function SolarSystemViewer(props: ViewerProp){
   }
 
   let habitable_max_props = {
-    radius: max, 
-    left: center_x - max, 
-    top: center_y - max, 
+    radius: max_radius, 
+    left: center_x - max_radius, 
+    top: center_y - max_radius, 
     fill: "green", 
-    opacity: 0.4, 
+    opacity: 0.3, 
   }
 
   let habitable_min_props = {
-    radius: min, 
-    left: center_x - min, 
-    top: center_y - min, 
-    fill: "white",
+    radius: min_radius, 
+    left: center_x - min_radius, 
+    top: center_y - min_radius, 
+    fill: "white", 
+    globalCompositeOperation: 'destination-out'
   }
 
   let shadow1_props = {
-    color: 'lightgreen',
+    color: 'white',
     blur: 20,
   }
 
@@ -89,45 +121,25 @@ function SolarSystemViewer(props: ViewerProp){
     element.lockMovementY = true;
     element.selectable = false;
   }
-  
 
   if(canvas){
     canvas.__onMouseDown = () => null;
-    canvas.renderTop();
-    canvas.clear();
     var habitable_1 = new Circle(habitable_max_props);
     habitable_1.set('shadow', new Shadow(shadow1_props))
     var habitable_2 = new Circle(habitable_min_props);
     habitable_2.set('shadow', new Shadow(shadow2_props))
-    var orbit = new Ellipse(ellipse_props);
     var star = new Circle(star_props);
 
 
     var elements = [];
     elements.push(habitable_1);
     elements.push(habitable_2);
-    elements.push(orbit);
     elements.push(star);
     for(let i=0 ; i<elements.length ; i++){
       stopDragging(elements[i]);
     }
     canvas.add(...elements);
   }
-    
-
-  useEffect(() => {
-    setCanvas(initCanvas());
-  }, []);
-  return (
-    <div style={{position: "relative", width: width, height: height, pointerEvents: "none", userSelect: "none" }}>
-      <div style={{position: "absolute", top: "0.25em", left: "0.25em"}}>
-        <canvas id='canvas'/>
-      </div>
-      <div style={{position: "absolute", top: 0, left: 0}}>
-        <PlanetMotion ec={ec} axis={axis} offsetX={center_x} offsetY={center_y}/>
-      </div>
-    </div>
-  );
 }
 
 function SolarSystemController(props: ControllerProp){
@@ -135,27 +147,51 @@ function SolarSystemController(props: ControllerProp){
   const {ec, setEc, axis, setAxis} = props;
   return (
     <div style={{right: 0}}>
-      <Slider name="setEc" min={0} max={0.95} step={0.01} value={ec} valueToShow={"Eccentricity: " + ec} setValue={setEc}/>
-      <Slider name="setAxis" min={50} max={100} step={0.01} value={axis} valueToShow={"Semi-major Axis: " + axis} setValue={setAxis}/>
+      <Slider name="setEc" min={0} max={0.95} step={0.001} value={ec} valueToShow={"Eccentricity: " + ec} setValue={setEc}/>
+      <Slider name="setAxis" min={50} max={100} step={0.001} value={axis} valueToShow={"Semi-major Axis: " + axis} setValue={setAxis}/>
     </div>
   );
 }
 
 export default function SolarSystem(props: SolarSystemProp) {
 
-  const {height, width, habitable_min, habitable_max} = props;
+  const {height, width, habitable_min, habitable_max, planets, create} = props;
+
   const [ec, setEc] = useState(0); // eccentricity
   const [axis, setAxis] = useState(100); // semi-major axis
+  const planetList = planets.map((planet, idx) => (
+    <SolarSystemEllipse key={idx} ec={planet.ec} axis={planet.axis} size={planet.size} color={planet.color} 
+      width={width} height={height} check={ec}/>
+  ));
+  var canvas: Canvas;
+
+  useEffect(() => {
+    canvas = new Canvas("canvas", {
+      height: height,
+      width: width
+    });
+    DrawHabitable(habitable_min, habitable_max, canvas)
+    if(create) DrawEllipse(ec, axis, canvas)
+    planets.map((planet) => {DrawEllipse(planet.ec, planet.axis, canvas)})
+    return () => {
+      canvas.dispose();
+    };
+  })
 
 
   return (
     <div>
-      <div style={{width: "50%"}}>
-        <SolarSystemViewer height={height/2} width={width/2} ec={ec} axis={axis} min={habitable_min} max={habitable_max}/>
+      <div style={{position: "relative", width: width, height: height, pointerEvents: "none", userSelect: "none" }}>
+        <canvas id="canvas"/>
+        {planetList}
+        {create === true ? <SolarSystemEllipse key={0} ec={ec} axis={axis} size={10} color={"white"}
+          width={width} height={height} check={ec}/> : null}
       </div>
       <div style={{right: 0}}>
-        <SolarSystemController ec={ec} setEc={setEc} axis={axis} setAxis={setAxis} />
+        {create === true ? <SolarSystemController ec={ec} setEc={setEc} axis={axis} setAxis={setAxis} /> : null}
+        
       </div>
     </div>
   );
+  
 }

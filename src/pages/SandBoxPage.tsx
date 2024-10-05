@@ -2,28 +2,27 @@ import styles from "./SandBoxPage.module.scss";
 import { useState } from "react";
 import Slider from "../components/Slider";
 import PieChartSlider from "../components/PieChartSlider";
+import SolarSystem from "../components/solar_system/SolarSystem";
+
+const planet1 = {
+  ec: 0.1, 
+  axis: 100, 
+  color: "red", 
+  size: 50
+}
+
+const planet2 = {
+  ec: 0.5, 
+  axis: 50, 
+  color: "blue", 
+  size: 10
+}
 
 export default function CreatePage() {
   const [radi, setRadi] = useState(1);
   return (
     <div>
-      <Slider
-        name="Semi-Major Axis(AU)"
-        min={0.1}
-        max={10}
-        step={0.1}
-        value={radi}
-        valueToShow={radi.toFixed(1) + "AU"}
-        setValue={setRadi}
-      />
-      <PieChartSlider names={["1", "2", "3", "4"]} />
-      <button className={styles.backButton}>Back</button>
-      <button className={styles.nextButton}>Next</button>
-      <button className={styles.createButton}>Create Planet</button>
-      <br />
-      <input placeholder="Name Your Planet" className={styles.formTitle} />
-      <br />
-      <textarea placeholder="Description" className={styles.formDesc} />
+      <SolarSystem height={500} width={500} habitable_max={200} habitable_min={100} planets={[planet1, planet2]} create={true}/>
     </div>
   );
 }
