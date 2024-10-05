@@ -1,0 +1,43 @@
+@import "../styles/Common.module.scss";
+
+.body {
+  width: 373px;
+  height: 512px;
+  padding: 48px;
+  gap: 32px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  background: rgba(31, 31, 34, 0.9);
+
+  .title {
+    font-style: italic;
+    font-size: 40px;
+    text-align: center;
+    line-height: 60px;
+  }
+
+  input {
+    @include form-title;
+    width: 341px;
+    margin: 0;
+  }
+
+  button {
+    @include pink-button;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .quit {
+    width: 131px;
+    margin: 0 auto;
+    border-bottom: 1px solid $white;
+    cursor: pointer;
+    font-style: italic;
+    font-size: 16px;
+  }
+}
